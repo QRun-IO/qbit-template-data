@@ -1,47 +1,30 @@
 # Getting Started
 
-## Prerequisites
+Requires Java 21, Maven 3.8 or later, and a host application using QQQ 4.0.0. Dependencies resolve from Maven Central.
 
-- Java 17+
-- Maven 3.8+
-- QQQ 0.23.0+
+1. Choose **Use this template** on GitHub, then clone the repository you created.
+2. In `pom.xml`, set your own `groupId`, `artifactId`, name, description, and version.
+3. Use your IDE's package refactoring to rename `com.kingsrook.qbits.example` throughout `src/`. Rename the `Example*` classes and update their imports and references with the IDE's rename refactoring.
+4. Update the QBit producer's `GROUP_ID`, `ARTIFACT_ID`, and `VERSION` constants to match your project. Give the metadata names their own stable names before combining the QBit with other examples.
+5. Build the generated project:
 
-## Creating Your Data QBit
-
-1. Click "Use this template" on GitHub
-2. Clone your new repository
-3. Run the customization script:
-   ```bash
-   python scripts/customize_template.py
-   ```
-4. Enter your QBit name when prompted
-
-## Project Structure
-
-```
-src/main/java/com/kingsrook/qbits/yourdata/
-├── YourDataQBitConfig.java
-├── YourDataQBitProducer.java
-├── model/
-│   └── YourEntity.java
-├── sync/
-│   └── YourDataSyncProcess.java
-└── liquibase/
-    └── YourLiquibaseGenerator.java
+```bash
+mvn clean verify
 ```
 
-## Using Your QBit
+The repository provides example Java sources; customization uses normal package/class refactoring. Keep example coordinates unpublished. After customizing, add tests for your QBit's behavior before setting up its publishing workflow.
+
+## Register with a host application
+
+The following uses the original example names; substitute the names chosen above:
 
 ```java
-new YourDataQBitProducer()
-   .withConfig(new YourDataQBitConfig()
-      .withBackendName("rdbms")
-      .withTableNamePrefix("myprefix"))
+new ExampleDataQBitProducer()
+   .withConfig(new ExampleDataQBitConfig()
+      .withBackendName("rdbms"))
    .produce(qInstance, "my-data");
 ```
 
-## Next Steps
+Register the configured backend in the host first. If you add table prefixes or multiple QBit instances, update related table references, possible-value-source names, and process/widget names consistently. A table prefix alone does not namespace all metadata.
 
-- Read [Data QBit Architecture](01-data-qbit-architecture.md)
-- Implement your sync process
-- Generate Liquibase changelog
+[Data QBit Architecture](01-data-qbit-architecture.md) explains the example data model.

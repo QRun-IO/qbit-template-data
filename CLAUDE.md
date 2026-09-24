@@ -4,6 +4,10 @@ GitHub template repo for scaffolding QQQ "Data QBits" (reference data +
 table prefixing + sync process + Liquibase generation). Placeholder package
 `com.kingsrook.qbits.example`; meant to be renamed by template consumers.
 
+## QQQ 4.0 baseline — 2026-09-24
+
+The historical review below predates the 4.0 migration. This template targets Java 21 and the public QQQ 4.0.0 release from Maven Central. The corrected APIs, license references and actual template commands are in README.md and docs/00-getting-started.md. Preserve the documented multi-instance and scaffold limitations.
+
 ## Knowledge base
 
 - Domain hub: `R:/Git.Local/KofTwentyTwo/second-brain/knowledge/qqq/qqq-hub.md`

@@ -12,24 +12,20 @@ Data QBits provide reusable reference data sets that applications consume. They 
 
 ## Quick Start
 
-1. Click "Use this template" to create your QBit
-2. Run `scripts/customize_template.py` to rename the example
-3. Define your entity classes
-4. Add reference data JSON files
-5. Implement sync process
-6. Generate Liquibase changelog
+Requires **Java 21**, **Maven 3.8+**, and QQQ **4.0.0**. Create your repository, rename its Maven coordinates and Java package/classes, then run `mvn clean verify`. See [Getting Started](docs/00-getting-started.md).
 
 ## Structure
 
 ```
 src/main/java/com/kingsrook/qbits/example/
-├── ExampleDataQBitConfig.java       # Extends AbstractDataQBitConfig
-├── ExampleDataQBitProducer.java     # Extends AbstractDataQBitProducer
+├── ExampleDataQBitConfig.java       # Configuration
+├── ExampleDataQBitProducer.java     # QBit registration
 ├── model/
 │   ├── ExampleEntity.java
 │   └── ExampleChildEntity.java
 ├── sync/
-│   └── ExampleDataSyncProcess.java
+│   ├── ExampleDataSyncStep.java
+│   └── ExampleDataSyncProcessMetaDataProducer.java
 └── liquibase/
     └── ExampleLiquibaseGenerator.java
 ```
@@ -37,27 +33,19 @@ src/main/java/com/kingsrook/qbits/example/
 ## Key Characteristics
 
 - **Table prefixing** - `shipping_country`, `billing_country`
-- **Multi-instance** - Same QBit deployed multiple times
+- **Host configuration** - Backend and optional table prefix
 - **Sync process** - Upsert by natural key
 - **Liquibase generator** - Template-based, prefix-aware
 
-## Multi-Instance Usage
+## Host integration
 
 ```java
-// Shipping addresses
-new GeoDataQBitProducer()
-   .withConfig(new GeoDataQBitConfig()
-      .withBackendName("rdbms")
-      .withTableNamePrefix("shipping"))
-   .produce(qInstance, "shipping-geo");
-
-// Billing addresses
-new GeoDataQBitProducer()
-   .withConfig(new GeoDataQBitConfig()
-      .withBackendName("rdbms")
-      .withTableNamePrefix("billing"))
-   .produce(qInstance, "billing-geo");
+new ExampleDataQBitProducer()
+   .withConfig(new ExampleDataQBitConfig().withBackendName("rdbms"))
+   .produce(qInstance, "example-data");
 ```
+
+The host must already define the backend. The example prefixes table names; adapting it for multiple instances also requires unique process and possible-value-source names and consistent references. See [Getting Started](docs/00-getting-started.md).
 
 ## Documentation
 
@@ -68,4 +56,4 @@ new GeoDataQBitProducer()
 
 ## License
 
-AGPL-3.0 - See [LICENSE](LICENSE)
+See [LICENSE](LICENSE) and [NOTICE](NOTICE).

@@ -6,14 +6,14 @@ package com.kingsrook.qbits.example.sync;
 
 import java.util.List;
 import com.kingsrook.qqq.backend.core.exceptions.QException;
+import com.kingsrook.qqq.backend.core.model.metadata.MetaDataProducerInterface;
 import com.kingsrook.qqq.backend.core.model.metadata.QInstance;
 import com.kingsrook.qqq.backend.core.model.metadata.code.QCodeReference;
 import com.kingsrook.qqq.backend.core.model.metadata.fields.QFieldMetaData;
 import com.kingsrook.qqq.backend.core.model.metadata.fields.QFieldType;
 import com.kingsrook.qqq.backend.core.model.metadata.processes.QBackendStepMetaData;
+import com.kingsrook.qqq.backend.core.model.metadata.processes.QFunctionInputMetaData;
 import com.kingsrook.qqq.backend.core.model.metadata.processes.QProcessMetaData;
-import com.kingsrook.qqq.backend.core.model.MetaDataProducerInterface;
-import com.kingsrook.qbits.example.model.ExampleEntity;
 
 
 public class ExampleDataSyncProcessMetaDataProducer implements MetaDataProducerInterface<QProcessMetaData>
@@ -31,15 +31,14 @@ public class ExampleDataSyncProcessMetaDataProducer implements MetaDataProducerI
       return new QProcessMetaData()
          .withName(NAME)
          .withLabel("Example Data Sync")
-         .withInputFields(List.of(
-            new QFieldMetaData("tableName", QFieldType.STRING),
-            new QFieldMetaData("naturalKeyField", QFieldType.STRING),
-            new QFieldMetaData("dataResourcePath", QFieldType.STRING)
-         ))
          .withStepList(List.of(
             new QBackendStepMetaData()
                .withName("sync")
                .withCode(new QCodeReference(ExampleDataSyncStep.class))
+               .withInputData(new QFunctionInputMetaData()
+                  .withField(new QFieldMetaData("tableName", QFieldType.STRING))
+                  .withField(new QFieldMetaData("naturalKeyField", QFieldType.STRING))
+                  .withField(new QFieldMetaData("dataResourcePath", QFieldType.STRING)))
          ));
    }
 }

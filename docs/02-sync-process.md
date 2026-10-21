@@ -27,44 +27,10 @@ Source Data (JSON) --> Sync Process --> Database Tables
 
 ## Implementation
 
-```java
-public class ExampleDataSyncStep extends AbstractTransformStep
-{
-   @Override
-   public void runOnePage(RunBackendStepInput input, RunBackendStepOutput output)
-   {
-      // 1. Load source data from classpath JSON
-      List<QRecord> sourceRecords = loadJsonData(resourcePath);
+The checked implementation is [ExampleDataSyncStep](../src/main/java/com/kingsrook/qbits/example/sync/ExampleDataSyncStep.java), with process metadata in [ExampleDataSyncProcessMetaDataProducer](../src/main/java/com/kingsrook/qbits/example/sync/ExampleDataSyncProcessMetaDataProducer.java). It implements both `runOnePage` and the required `getProcessSummary` method.
 
-      // 2. Query existing by natural key
-      Map<String, QRecord> existingByKey = queryExisting(tableName, naturalKeyField);
+The step loads classpath JSON, queries existing rows by their natural key, separates inserts/updates/deactivations, and calls its insert/update helpers. Deactivation explicitly sets `isActive=false` for removed active rows. Follow the source helper signatures when adapting the step, and review its execution behavior before introducing a preview or validation screen. The presence of an `isActive` field does not itself filter normal queries.
 
-      // 3. Categorize records
-      for(QRecord source : sourceRecords)
-      {
-         String key = source.getValueString(naturalKeyField);
-         QRecord existing = existingByKey.remove(key);
-
-         if(existing == null)
-            toInsert.add(source);           // New record
-         else if(hasChanges(source, existing))
-            toUpdate.add(source);           // Changed record
-      }
-
-      // 4. Remaining in map - no longer in source
-      for(QRecord orphan : existingByKey.values())
-      {
-         orphan.setValue("isActive", false);
-         toDeactivate.add(orphan);          // Soft delete
-      }
-
-      // 5. Execute operations
-      insertRecords(toInsert);
-      updateRecords(toUpdate);
-      updateRecords(toDeactivate);
-   }
-}
-```
 
 ## Data File Format
 

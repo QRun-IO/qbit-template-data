@@ -2,7 +2,7 @@
 
 ## Table Prefixing
 
-Data QBits support table prefixing for multi-instance deployment:
+The producer can prefix metadata names. Prefixing alone does not guarantee multiple independent instances: review process names, relationships and any hard-coded table references before registering more than one instance.
 
 ```java
 public String applyPrefix(String tableName)
@@ -54,6 +54,8 @@ public class ExampleEntity extends QRecordEntity
    private String code;  // Natural key
 
    @QField
-   private Boolean isActive = true;  // Soft delete
+   private Boolean isActive = true;  // Used by the sync process's explicit deactivation logic
 }
 ```
+
+An `isActive` field is not a global soft-delete facility. Add appropriate query filters and application behavior for inactive rows.

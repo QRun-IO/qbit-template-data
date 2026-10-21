@@ -17,8 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import com.kingsrook.qqq.backend.core.actions.processes.RunBackendStepInput;
-import com.kingsrook.qqq.backend.core.actions.processes.RunBackendStepOutput;
 import com.kingsrook.qqq.backend.core.actions.tables.InsertAction;
 import com.kingsrook.qqq.backend.core.actions.tables.QueryAction;
 import com.kingsrook.qqq.backend.core.actions.tables.UpdateAction;
@@ -31,6 +29,7 @@ import com.kingsrook.qqq.backend.core.model.actions.tables.query.QQueryFilter;
 import com.kingsrook.qqq.backend.core.model.actions.tables.query.QueryInput;
 import com.kingsrook.qqq.backend.core.model.actions.tables.query.QueryOutput;
 import com.kingsrook.qqq.backend.core.model.actions.tables.update.UpdateInput;
+import com.kingsrook.qqq.backend.core.model.actions.processes.ProcessSummaryLineInterface;
 import com.kingsrook.qqq.backend.core.model.data.QRecord;
 import com.kingsrook.qqq.backend.core.processes.implementations.etl.streamedwithfrontend.AbstractTransformStep;
 import org.json.JSONArray;
@@ -235,5 +234,16 @@ public class ExampleDataSyncStep extends AbstractTransformStep
       updateInput.setTableName(tableName);
       updateInput.setRecords(records);
       new UpdateAction().execute(updateInput);
+   }
+
+
+
+   /*******************************************************************************
+    ** Return the process summary.
+    *******************************************************************************/
+   @Override
+   public ArrayList<ProcessSummaryLineInterface> getProcessSummary(RunBackendStepOutput runBackendStepOutput, boolean isForResultScreen)
+   {
+      return (new ArrayList<>());
    }
 }
